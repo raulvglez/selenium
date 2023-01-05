@@ -22,8 +22,6 @@ public class LoginTests {
 
     private static LoginPage loginPage;
 
-    private static CommonPage commonPage;
-
     @Test
     public void testLoginStandardUser_shouldPass() {
         testLoginWithCredentials(STANDARD_USER, PASSWORD);
@@ -31,6 +29,7 @@ public class LoginTests {
 
     @Test
     public void testLoginLockedOutUser_shouldFail() {
+        //This test should fail as the locked out user can't log in, that user will never reach the url 'https://www.saucedemo.com/inventory.html'
         testLoginWithCredentials(LOCKED_OUT_USER, PASSWORD);
     }
 
@@ -55,7 +54,6 @@ public class LoginTests {
         driver = new ChromeDriver();
         driver.get(SAUCEDEMO_URL);
         loginPage = new LoginPage(driver);
-        commonPage = new CommonPage(driver);
     }
 
     @After

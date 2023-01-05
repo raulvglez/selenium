@@ -18,6 +18,12 @@ public class InventoryPage extends CommonPage {
     @FindBy(xpath = "//*[contains(text(), 'Add to cart')]")
     private List<WebElement> buttonsAddToCart;
 
+    @FindBy(xpath = "//*[contains(text(), 'Remove')]")
+    private List<WebElement> buttonsRemoveFromCart;
+
+    @FindBy(className = "inventory_item")
+    private List<WebElement> allItemsInInventory;
+
     public InventoryPage(WebDriver driver) {
         super(driver);
         this.driver = driver;
@@ -28,4 +34,11 @@ public class InventoryPage extends CommonPage {
         return buttonsAddToCart;
     }
 
+    public List<WebElement> getAllItemsInInventory() {
+        return allItemsInInventory;
+    }
+
+    public List<WebElement> getButtonsRemoveFromCart() {
+        return buttonsRemoveFromCart;
+    }
 }

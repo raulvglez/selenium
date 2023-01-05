@@ -14,8 +14,6 @@ public class InventoryTests {
 
     private final String STANDARD_USER = "standard_user";
 
-    private final String LOCKED_OUT_USER = "locked_out_user";
-
     private final String PROBLEM_USER = "problem_user";
 
     private final String PERFORMANCE_GLITCH_USER = "performance_glitch_user";
@@ -30,23 +28,47 @@ public class InventoryTests {
 
     @Test
     public void addAllItemsToCartStandardUser_shouldPass() {
-        loginPage.sendCredentialsAndLogin(STANDARD_USER, PASSWORD);
-        inventoryPage.getButtonsAddToCart().forEach(WebElement::click);
-        Assert.assertEquals("6", inventoryPage.numberOfItemsInCart());
+        addingAllItemsToCartAndCheckingSizeByUser(STANDARD_USER, PASSWORD);
     }
 
     @Test
     public void addAllItemsToCartProblemUser_shouldFail() {
-        loginPage.sendCredentialsAndLogin(PROBLEM_USER, PASSWORD);
-        inventoryPage.getButtonsAddToCart().forEach(WebElement::click);
-        Assert.assertEquals("6", inventoryPage.numberOfItemsInCart());
+        //One of the problems the Problem User has is not being able to add all items to cart, so this test will fail.
+        addingAllItemsToCartAndCheckingSizeByUser(PROBLEM_USER, PASSWORD);
     }
 
     @Test
     public void addAllItemsToCartPerformanceGlitchUser_shouldPass() {
-        loginPage.sendCredentialsAndLogin(PERFORMANCE_GLITCH_USER, PASSWORD);
+        addingAllItemsToCartAndCheckingSizeByUser(PERFORMANCE_GLITCH_USER, PASSWORD);
+    }
+
+    @Test
+    public void addAllItemsToCartThenRemoveStandardUser_shouldPass() {
+        addingAllItemsToCartAndRemovingThem(STANDARD_USER, PASSWORD);
+    }
+
+    @Test
+    public void addAllItemsToCartThenRemoveProblemUser_shouldFail() {
+        addingAllItemsToCartAndRemovingThem(PROBLEM_USER, PASSWORD);
+    }
+
+    @Test
+    public void addAllItemsToCartThenRemovePerformanceGlitchUser_shouldPass() {
+        addingAllItemsToCartAndRemovingThem(PERFORMANCE_GLITCH_USER, PASSWORD);
+    }
+
+
+    public void addingAllItemsToCartAndRemovingThem(String username, String password) {
+        loginPage.sendCredentialsAndLogin(username, password);
         inventoryPage.getButtonsAddToCart().forEach(WebElement::click);
-        Assert.assertEquals("6", inventoryPage.numberOfItemsInCart());
+        inventoryPage.getButtonsRemoveFromCart().forEach(WebElement::click);
+        Assert.assertEquals(inventoryPage.getAllItemsInInventory().size(), inventoryPage.getButtonsAddToCart().size());
+    }
+
+    public void addingAllItemsToCartAndCheckingSizeByUser(String username, String password) {
+        loginPage.sendCredentialsAndLogin(username, password);
+        inventoryPage.getButtonsAddToCart().forEach(WebElement::click);
+        Assert.assertEquals(inventoryPage.getAllItemsInInventory().size(), inventoryPage.numberOfItemsInCart());
     }
 
     @Before
@@ -57,6 +79,7 @@ public class InventoryTests {
         loginPage = new LoginPage(driver);
         inventoryPage = new InventoryPage(driver);
     }
+
 
     @After
     public void closeDriver()  {

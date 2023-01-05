@@ -5,6 +5,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.List;
+
 public class CommonPage {
 
     private final WebDriver driver;
@@ -40,7 +42,7 @@ public class CommonPage {
 
     public void openLeftMenu() throws InterruptedException {
         buttonLeftMenu.click();
-        Thread.sleep(1000);
+        Thread.sleep(1000); //When clicking the button to open the left menu it takes a while to load, so sleeping the thread for 1s gives it time to load.
     }
 
     public void closeLeftMenu() {
@@ -51,9 +53,9 @@ public class CommonPage {
         return itemsInCart.isDisplayed();
     }
 
-    public String numberOfItemsInCart() {
+    public int numberOfItemsInCart() {
         if (areItemsInCartLoaded()) {
-            return itemsInCart.getText();
+            return Integer.parseInt(itemsInCart.getText());
         } else {
             throw new RuntimeException();
         }
